@@ -13,11 +13,6 @@ export const Home = ({ onJoinGame }: HomeProps) => {
   const [error, setError] = useState('');
 
   const createRoom = async () => {
-    if (!supabase) {
-      setError('Supabase is not configured');
-      return;
-    }
-
     if (!playerName.trim()) {
       setError('Please enter your name');
       return;
@@ -60,11 +55,6 @@ export const Home = ({ onJoinGame }: HomeProps) => {
   };
 
   const joinRoom = async () => {
-    if (!supabase) {
-      setError('Supabase is not configured');
-      return;
-    }
-
     if (!playerName.trim()) {
       setError('Please enter your name');
       return;
