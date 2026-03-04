@@ -8,12 +8,6 @@ import { Room, Player } from './types/game';
 type GamePhase = 'home' | 'waiting' | 'playing' | 'error';
 
 function App() {
-  useEffect(() => {
-    if (!supabase) {
-      setGamePhase('error');
-    }
-  }, []);
-
   const [gamePhase, setGamePhase] = useState<GamePhase>(!supabase ? 'error' : 'home');
   const [roomCode, setRoomCode] = useState<string | null>(null);
   const [roomId, setRoomId] = useState<string | null>(null);
@@ -98,7 +92,7 @@ function App() {
   };
 
   const handleLeaveGame = async () => {
-    if (playerId) {
+    if (playerId && supabase) {
       await supabase.from('players').delete().eq('id', playerId);
     }
 
