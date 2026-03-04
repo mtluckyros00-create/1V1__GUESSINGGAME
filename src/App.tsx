@@ -22,7 +22,7 @@ function App() {
   const [players, setPlayers] = useState<Player[]>([]);
 
   useEffect(() => {
-    if (!roomCode) return;
+    if (!roomCode || !supabase) return;
 
     let channel: ReturnType<typeof supabase.channel> | null = null;
 
@@ -84,7 +84,7 @@ function App() {
     subscribeToRoom();
 
     return () => {
-      if (channel) {
+      if (channel && supabase) {
         supabase.removeChannel(channel);
       }
     };
