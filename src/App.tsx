@@ -18,6 +18,8 @@ function App() {
   useEffect(() => {
     if (!roomCode) return;
 
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+
     const subscribeToRoom = async () => {
       const { data: room } = await supabase
         .from('rooms')
@@ -42,7 +44,7 @@ function App() {
         setGamePhase('playing');
       }
 
-      const channel = supabase
+      channel = supabase
         .channel(`room:${room.id}`)
         .on(
           'postgres_changes',
@@ -71,13 +73,15 @@ function App() {
           }
         )
         .subscribe();
-
-      return () => {
-        supabase.removeChannel(channel);
-      };
     };
 
     subscribeToRoom();
+
+    return () => {
+      if (channel) {
+        supabase.removeChannel(channel);
+      }
+    };
   }, [roomCode]);
 
   const handleJoinGame = (code: string, id: string, name: string) => {
